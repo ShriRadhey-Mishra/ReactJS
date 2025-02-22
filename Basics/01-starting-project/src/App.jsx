@@ -12,6 +12,18 @@ function App() {
         setSelectedTopic(selectedButton);
         console.log(selectTopic);
     }
+
+    let tabContent = <p>Please select a topic.</p>;
+    if (selectTopic) {
+        tabContent = (<div id="tab-content">
+            <h3>{EXAMPLES[selectTopic].title}</h3>
+            <p>{EXAMPLES[selectTopic].description}</p>
+            <pre>
+                <code>{EXAMPLES[selectTopic].code}</code>
+            </pre>
+        </div>);
+    }
+
     return (
         <div>
             <Header />
@@ -19,29 +31,18 @@ function App() {
                 <section id="core-concepts">
                     <h2>Core Concepts</h2>
                     <ul>
-                        <CoreConcepts {...CORE_CONCEPTS[0]} />
-                        <CoreConcepts {...CORE_CONCEPTS[1]} />
-                        <CoreConcepts {...CORE_CONCEPTS[2]} />
-                        <CoreConcepts {...CORE_CONCEPTS[3]} />
+                        {CORE_CONCEPTS.map((conceptItem)=> <CoreConcepts key={conceptItem.title} {...conceptItem} />)}
                     </ul>
                 </section>
                 <section id="examples">
                     <h2>Examples</h2>
                     <menu>
-                        <TabButton onSelect={() => onSelect("components")}>Components</TabButton>
-                        <TabButton onSelect={() => onSelect("jsx")}>JSX</TabButton>
-                        <TabButton onSelect={() => onSelect("props")}>Props</TabButton>
-                        <TabButton onSelect={() => onSelect("state")}>State</TabButton>
+                        <TabButton isSelected={ selectTopic === "components" } onSelect={() => onSelect("components")}>Components</TabButton>
+                        <TabButton isSelected={ selectTopic === "jsx" } onSelect={() => onSelect("jsx")}>JSX</TabButton>
+                        <TabButton isSelected={ selectTopic === "props" } onSelect={() => onSelect("props")}>Props</TabButton>
+                        <TabButton isSelected={ selectTopic === "state" } onSelect={() => onSelect("state")}>State</TabButton>
                     </menu>
-                    { !selectTopic ? <p>Please select a topic.</p>: null }
-                    { selectTopic && (<div id="tab-content">
-                        <h3>{EXAMPLES[selectTopic].title}</h3>
-                        <p>{EXAMPLES[selectTopic].description}</p>
-                        <pre>
-                            <code>{EXAMPLES[selectTopic].code}</code>
-                        </pre>
-                    </div>) }
-
+                    { tabContent }
                 </section>
             </main>
         </div>
